@@ -1,25 +1,71 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
 
-function App() {
+const App = () => {
+  const value = [];
+  const readonly = false;
+
+  const [selectedValues, setSelectedValues] = useState(value);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const handleCheckboxChange = (event, checkboxValue) => {
+    if (event.target.checked) {
+      setSelectedValues([...selectedValues, checkboxValue]);
+    } else {
+      setSelectedValues(
+        selectedValues.filter((value) => value !== checkboxValue)
+      );
+    }
+  };
+
+  const handleDropdownToggle = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <div className="lContainer">
+        <input
+          type="text"
+          value={selectedValues.join(", ")}
+          readOnly
+          onClick={handleDropdownToggle}
+          placeholder="e.g. Australia"
+          className="input-text"
+        />
+        {isDropdownOpen && (
+          <div className="dropdown">
+            {[
+              "Australia",
+              "Bermuda",
+              "Canada",
+              "Cameroon",
+              "Denamrk",
+              "France",
+              "Finland",
+              "Germany",
+              "India",
+              "China",
+              "Russia",
+              "Japan"
+            ].map((option) => (
+              <div key={option} className="input-option">
+                <input
+                  type="checkbox"
+                  value={option}
+                  checked={selectedValues.includes(option)}
+                  disabled={readonly}
+                  onChange={(event) => handleCheckboxChange(event, option)}
+                  className="input-option-checkbox"
+                />
+                <label>{option}</label>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
-}
+};
 
 export default App;
